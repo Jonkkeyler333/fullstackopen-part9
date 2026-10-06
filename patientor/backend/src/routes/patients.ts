@@ -36,8 +36,8 @@ const errorMiddleware = (error: unknown, _req: Request, res: Response, next: Nex
     }
 };
 
-router.get("/", (_req, res: Response<PatientEntry[]>) => {
-    res.status(200).json(patientsService.getPatients());
+router.get("/", (_req, res: Response<NonSensitivePatientEntry[]>) => {
+    res.status(200).json(patientsService.getNonSensitivePatients());
 });
 
 router.post("/", newPatientParser, (req: Request<unknown, unknown, NewPatientEntry>, res: Response<NonSensitivePatientEntry | string>) => {

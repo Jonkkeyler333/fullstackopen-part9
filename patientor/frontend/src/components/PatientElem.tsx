@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Patient, Diagnosis, Entry } from "../types";
 import diagnosisService from "../services/diagnosis";
+import patientService from "../services/patients";
 import { Typography, Container, Box } from "@mui/material";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
@@ -16,14 +17,20 @@ interface Props {
 
 const PatientElem = ({ patients, onEntryCreated }: Props) => {
   const id = useParams().id;
-  const patient = patients.find((elem) => elem.id === id);
+  const [patient, setPatient] = useState<Patient | undefined>(undefined);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
 
   useEffect(() => {
     diagnosisService.getAll()
     .then(data => setDiagnoses(data))
     .catch(error => console.error(error));
-  }, []);
+    patientService.getById(id || "")
+    .then(data => setPatient(data))
+    .catch(error => {
+      console.error(error);
+      setPatient(patients.find((elem) => elem.id === id));
+    });
+  }, [id, patients]);
   
 
   if (!patient) {
