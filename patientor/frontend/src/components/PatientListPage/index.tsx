@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from 'react-router-dom';
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
 import axios from 'axios';
 
@@ -33,10 +34,10 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
       setModalOpen(false);
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
-        if (e?.response?.data && typeof e?.response?.data === "string") {
-          const message = e.response.data.replace('Something went wrong. Error: ', '');
-          console.error(message);
-          setError(message);
+        if (e?.response?.data.error) {
+          const error = e.response.data.error[0];
+          console.log(error);
+          setError(`Error in the field ${error?.format}: ${error?.message}`);
         } else {
           setError("Unrecognized axios error");
         }
@@ -66,7 +67,7 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
         <TableBody>
           {Object.values(patients).map((patient: Patient) => (
             <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
+              <TableCell><Link to={`/patients/${patient.id}`}>{patient.name}</Link></TableCell>
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>

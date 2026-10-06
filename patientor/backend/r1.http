@@ -11,3 +11,22 @@ Content-Type: application/json
     "gender": "male",
     "occupation": "Software Engineer"
 }
+
+###
+GET http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667
+
+###
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+    "date": "2026-01-02",
+    "type": "Hospital",
+    "specialist": "MD House",
+    "diagnosisCodes": ["XD"],
+    "description": "Patient has a mild fever and cough.",
+    "discharge": {
+        "date": "2026-01-16",
+        "criteria": "Patient has recovered and is no longer contagious."
+    }
+}

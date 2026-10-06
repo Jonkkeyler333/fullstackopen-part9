@@ -4,10 +4,11 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { Button, Divider, Container, Typography } from '@mui/material';
 
 import { apiBaseUrl } from "./constants";
-import { Patient } from "./types";
+import { Patient, Entry } from "./types";
 
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
+import PatientElem from "./components/PatientElem";
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -21,6 +22,16 @@ const App = () => {
     };
     void fetchPatientList();
   }, []);
+
+  const addEntryToPatient = (patientId: string, entry: Entry) => {
+    setPatients((currentState) => 
+      currentState.map( (patient) => 
+        patient.id === patientId ? {
+          ...patient,
+          entries: [...(patient.entries ?? []), entry]
+        } : patient
+    ));
+  };
   
   return (
     <div className="App">
@@ -35,6 +46,7 @@ const App = () => {
           <Divider sx={{ marginY: 2 }} />
           <Routes>
             <Route path="/" element={<PatientListPage patients={patients} setPatients={setPatients} />} />
+            <Route path="/patients/:id" element={<PatientElem patients={patients} onEntryCreated={addEntryToPatient}/>} />
           </Routes>
         </Container>
       </Router>

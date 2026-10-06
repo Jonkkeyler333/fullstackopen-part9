@@ -30,8 +30,18 @@ const addPatiend = (entry: NewPatientEntry): NonSensitivePatientEntry => {
   return newPatientEntry;
 };
 
+const getPatientById = (Id: string): PatientEntry | null => {
+  const patient = patients.find(elem => elem.id === Id);
+  if (patient) {
+    return {...patient};
+  }else {
+    return null;
+  }
+};
+
 export default {
   getPatients,
   getNonSensitivePatients,
   addPatiend,
+  getPatientById
 };
